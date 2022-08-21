@@ -1,5 +1,7 @@
 # space-align-format
 
+https://marketplace.visualstudio.com/items?itemName=matsuyoido-kanro.space-align-format
+
 ## Features
 
 * Adjust the display of each row.
