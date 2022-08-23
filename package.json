@@ -3,11 +3,12 @@
 	"displayName": "space-align-format",
 	"description": "Align spaces.",
 	"icon": "vscode-logo.png",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/matsuyoido/space-align-format_vscode_extension"
 	},
+	"publisher": "matsuyoido-kanro",
 	"engines": {
 		"vscode": "^1.69.0"
 	},
@@ -42,6 +43,10 @@
 			"editor/context": [
 				{
 					"command": "matsuyoido.vscode.format.space_align",
+					"group": "Format"
+				},
+				{
+					"command": "matsuyoido.vscode.format.space_align_center",
 					"group": "Format"
 				}
 			]

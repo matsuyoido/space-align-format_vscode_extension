@@ -180,11 +180,24 @@ export function activate(context: vscode.ExtensionContext) {
 					rightTexts: string[];
 				}
 				const document: vscode.TextDocument = editor.document;
+				const selection: vscode.Selection = editor.selection;
 
+				let minLine: number = 0;
+				let maxLine: number = document.lineCount - 1;
+				if (!selection.isEmpty) {
+					let selectStartLine = selection.start.line;
+					let selectEndLine = selection.end.line;
+					if (selectStartLine == selectEndLine) {
+						console.info("space alignable multiple line, skip execute.");
+						return;
+					}
+					minLine = selectStartLine < selectEndLine ? selectStartLine : selectEndLine;
+					maxLine = selectStartLine < selectEndLine ? selectEndLine : selectStartLine;
+				}
 				const replaceValues: Map<vscode.Range, ReplaceTextInfo> = new Map();
 				let leftTextColumnMaxLength: number[] = [];
 				let rightTextColumnMaxLength: number[] = [];
-				for (let i = 0; i < document.lineCount; i++) {
+				for (let i = minLine; i <= maxLine; i++) {
 					const textLine: vscode.TextLine = document.lineAt(i);
 					if (textLine.isEmptyOrWhitespace) {
 						continue;
