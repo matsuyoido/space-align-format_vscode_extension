@@ -159,7 +159,7 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		})
 		,
-		vscode.commands.registerCommand('matsuyoido.vscode.format.space_align_center', async () => {
+		vscode.commands.registerCommand('matsuyoido.vscode.format.space_align_center_both', async () => {
 			const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
 			if (editor) {
 				const centerSplitCharacter: string | undefined = await vscode.window.showInputBox({
@@ -282,6 +282,115 @@ export function activate(context: vscode.ExtensionContext) {
 							}).reduce((previousValueText, columnText) => `${previousValueText} ${columnText}`);
 
 							editBuilder.replace(position, `${firstCharacter}${replaceLeftText} ${centerSplitCharacter} ${replaceRightText.trim()}`);
+						}
+					});
+				});
+
+			}
+
+		})
+		,
+		vscode.commands.registerCommand('matsuyoido.vscode.format.space_align_center_left', async () => {
+			const editor: vscode.TextEditor | undefined = vscode.window.activeTextEditor;
+			if (editor) {
+				const centerSplitCharacter: string | undefined = await vscode.window.showInputBox({
+					title: 'Input center character'
+				});
+				if (!centerSplitCharacter || centerSplitCharacter.trim().length == 0) {
+					console.info('center character input required.');
+					return;
+				}
+				let firstCharacter: string | undefined = await vscode.window.showInputBox({
+					title: '(Opt)Input word inserted at the beginning of the line.'
+				});
+				if (!firstCharacter) {
+					firstCharacter = "";
+				}
+				interface ReplaceTextInfo {
+					leftTexts: string[];
+					rightText: string;
+				}
+				const document: vscode.TextDocument = editor.document;
+				const selection: vscode.Selection = editor.selection;
+
+				let minLine: number = 0;
+				let maxLine: number = document.lineCount - 1;
+				if (!selection.isEmpty) {
+					let selectStartLine = selection.start.line;
+					let selectEndLine = selection.end.line;
+					if (selectStartLine == selectEndLine) {
+						console.info("space alignable multiple line, skip execute.");
+						return;
+					}
+					minLine = selectStartLine < selectEndLine ? selectStartLine : selectEndLine;
+					maxLine = selectStartLine < selectEndLine ? selectEndLine : selectStartLine;
+				}
+				const replaceValues: Map<vscode.Range, ReplaceTextInfo> = new Map();
+				let leftTextColumnMaxLength: number[] = [];
+				for (let i = minLine; i <= maxLine; i++) {
+					const textLine: vscode.TextLine = document.lineAt(i);
+					if (textLine.isEmptyOrWhitespace) {
+						continue;
+					}
+					const splitText = textLine.text.split(centerSplitCharacter);
+					if (splitText.length <= 1) {
+						console.debug(`skip line: [${i+1}]`);
+						continue;
+					} else if (2 < splitText.length) {
+						vscode.window.showErrorMessage(`${centerSplitCharacter} is multiple. Line: [${i+1}]`);
+						return;
+					}
+					let leftText = splitText[0].trim();
+
+					const leftColumnTexts = leftText.split(spaceRegex);
+					for (let j = leftColumnTexts.length - 1, k = 0; 0 <= j; j--, k++) {
+						let newLength = leftColumnTexts[j].length;
+						if (leftTextColumnMaxLength.length <= k) {
+							leftTextColumnMaxLength.push(newLength);
+						} else {
+							let currentLength = leftTextColumnMaxLength[k];
+							if (currentLength < newLength) {
+								leftTextColumnMaxLength[k] = newLength;
+							}
+						}
+					}
+
+					replaceValues.set(textLine.range, {
+						leftTexts: leftColumnTexts,
+						rightText: splitText[1],
+					});
+				}
+
+				editor.edit(editBuilder => {
+					Array.from(replaceValues.keys()).sort((a, b) => a.start.line - b.start.line).reverse().forEach((position: vscode.Range) => {
+						const replacInfo: ReplaceTextInfo | undefined = replaceValues.get(position);
+						if (replacInfo) {
+							let replaceLeftText: string = replacInfo.leftTexts.reverse().map((text, index) => {
+								let arrangedText = text;
+								let repeatCount = leftTextColumnMaxLength[index] - arrangedText.length;
+								for (let i = 0; i < repeatCount; i++) {
+									arrangedText+=" ";
+								}
+								return arrangedText;
+							}).reverse().reduce((previousValueText, columnText) => `${previousValueText} ${columnText}`);
+							if (replacInfo.leftTexts.length < leftTextColumnMaxLength.length) {
+								let adjustSpace: string = "";
+								for(let i = replacInfo.leftTexts.length; i < leftTextColumnMaxLength.length; i++) {
+									for (let j = 0; j < leftTextColumnMaxLength[i]; j++) {
+										adjustSpace+=" ";
+									}
+									if (i+1 < leftTextColumnMaxLength.length) {
+										// not last columns, add space
+										adjustSpace+=" ";
+									}
+								}
+								if (adjustSpace != "") {
+									replaceLeftText = `${adjustSpace} ${replaceLeftText}`;
+								}
+							}
+							let replaceRightText: string = replacInfo.rightText;
+
+							editBuilder.replace(position, `${firstCharacter}${replaceLeftText} ${centerSplitCharacter}${replaceRightText}`);
 						}
 					});
 				});

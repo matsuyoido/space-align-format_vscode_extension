@@ -120,7 +120,7 @@ Before:
 123 + 34 + 56 = 213
 12 + 345 + 6 = 363
 1234 + 56 = 1290
-12 + 34 + 5 + 6 = 57
+12 + 34 + 5 + 6 = 46 + 11
 ```
 
 After:
@@ -128,7 +128,7 @@ After:
      123 + 34   + 56 = 213
      12  + 345  + 6  = 363
            1234 + 56 = 1290
-12 + 34  + 5    + 6  = 57
+12 + 34  + 5    + 6  = 46   + 11
 ```
 
 #### Example2( input「=」 & input「    」 )
@@ -138,7 +138,7 @@ Before:
 123 + 34 + 56 = 213
 12 + 345 + 6 = 363
 1234 + 56 = 1290
-12 + 34 + 5 + 6 = 57
+12 + 34 + 5 + 6 = 46 + 11
 ```
 
 After:
@@ -146,7 +146,7 @@ After:
          123 + 34   + 56 = 213
          12  + 345  + 6  = 363
                1234 + 56 = 1290
-    12 + 34  + 5    + 6  = 57
+    12 + 34  + 5    + 6  = 46   + 11
 ```
 
 ### 5. Left-align a word relative to a character in the selected line
@@ -155,7 +155,7 @@ After:
 * How1
     1. select multiple line.
     1. Right click in selected range.
-    1. click 「Space by center character」
+    1. click 「Space by center character all」
 * How2
     1. select multiple line.
     1. Ctrl + Shift + P
@@ -171,7 +171,7 @@ Before:
 123 + 34 + 56 = 213
 12 + 345 + 6 = 363
 1234 + 56 = 1290
-12 + 34 + 5 + 6 = 57
+12 + 34 + 5 + 6 = 46 + 11
 ```
 
 After:
@@ -179,9 +179,86 @@ After:
 123 + 34 + 56 = 213
 12 + 345  + 6  = 363
      1234 + 56 = 1290
-12 + 34 + 5 + 6 = 57
+12 + 34 + 5 + 6 = 46 + 11
 ```
 
+### 6. Left-align a word relative to a character(left only)
+
+#### Step
+1. Ctrl + Shift + P
+1. input & select「Format: Space by center character(left only)」
+1. Input the word that you want to center.
+1. (Optional) Input the word that you want to insert the beginning of the line.
+    - If you don't need it, enter 「Escape key」 or 「Enter key」
+
+#### Example1( input「=」 & Escape )
+
+Before:
+```
+123 + 34 + 56 = 213
+12 + 345 + 6 = 363
+1234 + 56 = 1290
+12 + 34 + 5 + 6 = 46 + 11
+```
+
+After:
+```
+     123 + 34   + 56 = 213
+     12  + 345  + 6  = 363
+           1234 + 56 = 1290
+12 + 34  + 5    + 6  = 46 + 11
+```
+
+#### Example2( input「=」 & input「    」 )
+
+Before:
+```
+123 + 34 + 56 = 213
+12 + 345 + 6 = 363
+1234 + 56 = 1290
+12 + 34 + 5 + 6 = 46 + 11
+```
+
+After:
+```
+         123 + 34   + 56 = 213
+         12  + 345  + 6  = 363
+               1234 + 56 = 1290
+    12 + 34  + 5    + 6  = 46 + 11
+```
+
+### 7. Left-align a word relative to a character in the selected line(left only)
+
+#### Step
+* How1
+    1. select multiple line.
+    1. Right click in selected range.
+    1. click 「Space by center character(left only)」
+* How2
+    1. select multiple line.
+    1. Ctrl + Shift + P
+    1. input & select「Format: Space by center character(left only)」
+    1. Input the word that you want to center.
+    1. (Optional) Input the word that you want to insert the beginning of the line.
+        - If you don't need it, enter 「Escape key」 or 「Enter key」
+
+#### Example( 2~3 line selected. )
+
+Before:
+```
+123 + 34 + 56 = 213
+12 + 345 + 6 = 363
+1234 + 56 = 1290
+12 + 34 + 5 + 6 = 46 + 11
+```
+
+After:
+```
+123 + 34 + 56 = 213
+12 + 345  + 6  = 363
+     1234 + 56 = 1290
+12 + 34 + 5 + 6 = 46 + 11
+```
 
 ## Release Notes
 

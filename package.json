@@ -3,7 +3,7 @@
 	"displayName": "space-align-format",
 	"description": "Align spaces.",
 	"icon": "vscode-logo.png",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/matsuyoido/space-align-format_vscode_extension"
@@ -18,7 +18,8 @@
 	"activationEvents": [
 		"onCommand:matsuyoido.vscode.format.space_align",
 		"onCommand:matsuyoido.vscode.format.space_align_group",
-		"onCommand:matsuyoido.vscode.format.space_align_center"
+		"onCommand:matsuyoido.vscode.format.space_align_center_both",
+		"onCommand:matsuyoido.vscode.format.space_align_center_left"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -35,8 +36,13 @@
 			},
 			{
 				"category": "Format",
-				"command": "matsuyoido.vscode.format.space_align_center",
+				"command": "matsuyoido.vscode.format.space_align_center_both",
 				"title": "Space by center character"
+			},
+			{
+				"category": "Format",
+				"command": "matsuyoido.vscode.format.space_align_center_left",
+				"title": "Space by center character(left only)"
 			}
 		],
 		"menus": {
@@ -46,7 +52,11 @@
 					"group": "Format"
 				},
 				{
-					"command": "matsuyoido.vscode.format.space_align_center",
+					"command": "matsuyoido.vscode.format.space_align_center_both",
+					"group": "Format"
+				},
+				{
+					"command": "matsuyoido.vscode.format.space_align_center_left",
 					"group": "Format"
 				}
 			]
